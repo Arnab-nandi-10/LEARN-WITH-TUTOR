@@ -1,0 +1,70 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Next.js and build output
+.next/
+**/.next/
+out/
+dist/
+build/
+coverage/
+.turbo/
+.vercel/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+!.env.example
+!**/.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript cache
+*.tsbuildinfo
+
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+*~
+.netrwhist
+
+# IDE caches
+*.iml
+.gradle/
+.classpath
+.project
+.settings/
+
+# Backups and temporary files
+*.bak
+*.tmp
+*.temp
+**/tmp/
+.cache/
+.npm/
+
+# Miscellaneous
+lerna-debug.log
+pnpm-lock.yaml
+.eslintcache
+*.orig
+.prettierignore

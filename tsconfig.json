@@ -1,0 +1,22 @@
+{
+  "extends": "./client/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["client/*"],
+      "@/client/*": ["client/*"]
+    }
+  },
+  "include": [
+    "client/next-env.d.ts",
+    "client/**/*.ts",
+    "client/**/*.tsx",
+    "client/**/*.d.ts",
+    "client/.next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "server/**",
+    "client/node_modules"
+  ]
+}

@@ -1,0 +1,56 @@
+# Endpoint Inventory
+
+Source backend branch: `tmp-backend-sync/backend` from `tutor-labs/learning-manament-system` `feature/backend`
+Local app backend: `backend/`
+Legend: `implemented`, `mismatched`, `missing-frontend`, `frontend-only`, `needs-backend`
+
+## Source Branch Routes
+
+| Method | Path | Auth / Role | Request Shape | Response Shape | Frontend Consumer | Status | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| POST | `/api/auth/signup` | Public | `{ name, email, password, role }` | `{ user, access_token, refresh_token }` | `lib/api/auth.ts`, `lib/stores/authStore.ts` | implemented | Current frontend matches the source branch contract. |
+| POST | `/api/auth/login` | Public | `{ email, password }` | `{ user, access_token, refresh_token }` | `lib/api/auth.ts`, `lib/stores/authStore.ts` | implemented | Used by the auth screens and store. |
+| POST | `/api/auth/refresh` | Public | `{ refresh_token }` | `{ access_token }` | `lib/api/client.ts`, `lib/api/auth.ts` | implemented | Used by the axios refresh flow. |
+| POST | `/api/auth/logout` | Public | `{ refresh_token }` | `{ message }` | `lib/api/auth.ts`, `lib/stores/authStore.ts` | implemented | Frontend already calls this route. |
+| POST | `/api/courses` | Auth, faculty | `{ title, description, category, price, thumbnail_url? }` | `Course` | `lib/api/courses.ts`, faculty create course flow | implemented | Matches current faculty course creation. |
+| PUT | `/api/courses/:id` | Auth, faculty | `Partial<CourseFormData>` | `Course` | `lib/api/courses.ts`, faculty edit details | implemented | Used in course editing. |
+| PATCH | `/api/courses/:id/publish` | Auth, faculty | none | `Course` | `lib/api/courses.ts`, faculty course editor | implemented | Used by the publish action. |
+| GET | `/api/courses/my` | Auth | none | `Course[]` | `lib/api/courses.ts`, faculty dashboard/courses | implemented | Used throughout faculty views. |
+| GET | `/api/courses/:id/full` | Auth | none | `FullCourse` | `lib/api/courses.ts`, student/faculty/admin course pages | implemented | Shared course detail contract. |
+| GET | `/api/courses/faculty` | Auth, faculty | none | `Course[]` | none | missing-frontend | Source branch exposes it, current frontend does not use it directly. |
+| GET | `/api/courses` | Public | optional paging/filter query | `Course[]` | `lib/api/courses.ts`, landing/student/admin surfaces | implemented | Used by catalog and admin overview helpers. |
+| POST | `/api/enrollments/:course_id` | Auth, student | none | `Enrollment` | `lib/api/enrollments.ts`, student course page | implemented | Used for enrollment CTA. |
+| GET | `/api/enrollments/my` | Auth | none | `Enrollment[]` | `lib/api/enrollments.ts`, student dashboards | implemented | Used by learning/dashboard flows. |
+| POST | `/api/exams` | Auth, faculty | `{ course_id, module_id?, title, total_marks?, time_limit?, passing_marks? }` | `Exam` | `lib/api/exams.ts`, faculty assessments page | implemented | Used by faculty assessment creation. |
+| GET | `/api/exams/:id` | Auth | none | `{ exam, questions }` | `lib/api/exams.ts`, student exam detail page | implemented | Shared exam detail endpoint. |
+| POST | `/api/modules/:module_id/lessons` | Auth, faculty | `LessonFormData` | `Lesson` | `lib/api/lessons.ts`, course editors | implemented | Used by faculty lesson creation. |
+| GET | `/api/modules/:module_id/lessons` | Auth | none | `Lesson[]` | `lib/api/lessons.ts`, legacy editor flows | implemented | Still used in the older faculty editor. |
+| PATCH | `/api/modules/:module_id/lessons/reorder` | Auth | `{ lessons: [{ id, order }] }` | `{ message }` | `lib/api/lessons.ts`, faculty course page | implemented | Reorder UI already uses it. |
+| GET | `/api/courses/:course_id/modules` | Auth | none | `Module[]` | `lib/api/modules.ts` | missing-frontend | Most screens prefer the full-course endpoint instead. |
+| POST | `/api/courses/:course_id/modules` | Auth, faculty | `{ title }` | `Module` | `lib/api/modules.ts`, faculty course editors | implemented | Used by module creation. |
+| PATCH | `/api/courses/:course_id/modules/reorder` | Auth | `{ modules: [{ id, order }] }` | `{ message }` | `lib/api/modules.ts`, faculty course page | implemented | Used by module reorder flow. |
+| POST | `/api/progress/:lesson_id` | Auth, student | none | `Progress` | `lib/api/progress.ts`, student course page | implemented | Used when marking lessons complete. |
+| GET | `/api/progress/:course_id` | Auth | none | `{ completed, total, percentage }` | `lib/api/progress.ts`, student/faculty/admin surfaces | implemented | Used for progress bars and analytics helpers. |
+| POST | `/api/questions` | Auth, faculty | `{ exam_id, question_text, options, correct_answer, marks }` | `Question` | `lib/api/questions.ts`, faculty assessments page | implemented | Used for question authoring. |
+| PATCH | `/api/questions/:id` | Auth, faculty | `Partial<QuestionFormData>` | `Question` | none | missing-frontend | Source branch supports updates; current UI does not expose it. |
+| DELETE | `/api/questions/:id` | Auth, faculty | none | `{ message }` | none | missing-frontend | Source branch supports deletes; current UI does not expose it. |
+| POST | `/api/upload/generate-url` | Auth | `{ file_type }` | `{ upload_url, file_url }` | `lib/api/upload.ts` | missing-frontend | API helper exists, but no active upload UI calls it yet. |
+| GET | `/api/analytics/:course_id` | Auth | none | `{ total_students, total_progress_records, total_attempts }` | `lib/api/analytics.ts`, faculty/admin analytics | implemented | Used by analytics and dashboards. |
+| POST | `/api/attempts/:exam_id` | Auth, student | `{ answers: [{ question_id, selected_option }] }` | `{ score, total, passed }` | `lib/api/attempts.ts`, student exam page | implemented | Used in the strict exam submission flow. |
+
+## Important Deltas Against The Current App
+
+| Method | Path | Auth / Role | Request Shape | Response Shape | Frontend Consumer | Status | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| GET | `/api/exams/course/:course_id` | Auth | none | `Exam[]` | `lib/api/exams.ts`, faculty assessments, student exams page | needs-backend | Present in the local backend and required for student exam discovery, but missing from the cloned source branch. |
+| GET | `/api/questions/exam/:exam_id` | Auth | none | `Question[]` | `lib/api/questions.ts`, faculty/student exam flows | needs-backend | Present locally, missing from the cloned source branch. |
+| GET | `/api/attempts/exam/:exam_id` | Auth | none | `Attempt` or `Attempt[]` | faculty results, future student exam status | needs-backend | Present locally, missing from the cloned source branch. |
+| GET | `/api/attempts/:id` | Auth | none | `Attempt` | none | needs-backend | Local backend exposes it, source branch does not. |
+| GET | `/api/auth/me` | Auth | none | `User` | none | mismatched | Local backend exposes it, source branch does not. |
+| GET | `/api/courses/:id` | Auth | none | `FullCourse` | `lib/api/courses.ts` fallback path | mismatched | Local backend exposes it, source branch only guarantees `/:id/full`. |
+| DELETE | `/api/courses/:id` | Auth, faculty | none | `{ message }` | none | mismatched | Local backend exposes delete, source branch does not. |
+| PUT | `/api/enrollments/:course_id` | Auth, student | enrollment update payload | `Enrollment` | none | mismatched | Local backend exposes update, source branch does not. |
+| DELETE | `/api/enrollments/:course_id` | Auth, student | none | `{ message }` | none | mismatched | Local backend exposes delete, source branch does not. |
+| GET | `/api/users` | Unknown | none | `User[]` | `lib/api/users.ts`, admin overview/pages | frontend-only | Current frontend expects it, but neither the local backend app nor the cloned source branch mounts it. |
+| Lesson practice-check endpoints | TBD | TBD | TBD | TBD | none yet | needs-backend | Planned feature for in-lesson understanding checks; not present in either backend snapshot. |
+| Progress-based exam eligibility metadata | TBD | Auth | TBD | TBD | student exams list/detail | needs-backend | Current exam unlock logic is derived on the frontend from progress summary because the backend does not expose dedicated eligibility metadata. |
