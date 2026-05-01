@@ -2,9 +2,22 @@ const auth_service=require("../services/auth_service")
 
 const signup=async(req,res,next)=>{
     try{
+        console.log("📝 Signup request received:", {
+            email: req.body.email,
+            name: req.body.name,
+            role: req.body.role
+        })
         const data=await auth_service.signup(req.body)
+        console.log("✅ Signup success for:", data.user.email)
         res.status(201).json({success:true,data})
-    }catch(err){next(err)}
+    }catch(err){
+        console.error("❌ Signup error:", {
+            message: err.message,
+            status: err.status,
+            received_body: req.body
+        })
+        next(err)
+    }
 }
 
 const login=async(req,res,next)=>{

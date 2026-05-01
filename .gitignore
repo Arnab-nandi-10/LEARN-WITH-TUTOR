@@ -68,3 +68,5 @@ pnpm-lock.yaml
 .eslintcache
 *.orig
 .prettierignore
+
+*.md
