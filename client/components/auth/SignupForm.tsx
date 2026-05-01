@@ -25,9 +25,7 @@ export default function SignupForm({ requestedRole }: SignupFormProps) {
   const router = useRouter();
   const { signup } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const enableAdminSignup =
-    process.env.NODE_ENV !== 'production' ||
-    process.env.NEXT_PUBLIC_ENABLE_ADMIN_SIGNUP === 'true';
+  const enableAdminSignup = process.env.NEXT_PUBLIC_ENABLE_ADMIN_SIGNUP === 'true';
   const initialRole = useMemo<SignupFormData['role']>(() => {
     if (
       requestedRole === 'student' ||
@@ -178,8 +176,11 @@ export default function SignupForm({ requestedRole }: SignupFormProps) {
 
         {selectedRole === 'admin' ? (
           <div className="rounded-xl border border-accent/20 bg-accent/5 px-4 py-3 text-sm text-text-secondary">
-            Admin signup is meant for local setup and first-account bootstrap. After the first
-            admin exists, the backend blocks new admin signups unless explicitly enabled.
+            Admin signup is disabled by default. Use the bootstrap admin account or set
+            <code className="mx-1 rounded bg-bg-elevated px-1.5 py-0.5 text-xs text-text-primary">
+              NEXT_PUBLIC_ENABLE_ADMIN_SIGNUP=true
+            </code>
+            if you intentionally want to allow it.
           </div>
         ) : null}
 

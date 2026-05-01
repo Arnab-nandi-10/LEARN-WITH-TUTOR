@@ -199,6 +199,22 @@ npm run start
 npm run lint
 ```
 
+### Local admin bootstrap
+
+If you need a guaranteed local admin account for development, run:
+
+```bash
+cd server/backend
+npm run ensure-admin
+```
+
+Default credentials:
+
+- Email: `local-admin@tutor.dev`
+- Password: `Admin@123456`
+
+Admin signup is disabled by default in the UI unless `NEXT_PUBLIC_ENABLE_ADMIN_SIGNUP=true` is set.
+
 ### `server/backend/package.json`
 
 ```bash

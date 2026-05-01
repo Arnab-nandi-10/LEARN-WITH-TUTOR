@@ -80,9 +80,9 @@ export default function WorkspaceShell({
 
   const shellNav = (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">
-      <div className="border-b border-white/5 px-5 pb-5 pt-6">
+      <div className="shrink-0 border-b border-white/5 px-4 py-4">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#FF7A30,#FF5C00)] text-sm font-semibold text-white shadow-[0_10px_30px_rgba(255,92,0,0.25)]">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-[linear-gradient(135deg,#FF7A30,#FF5C00)] text-sm font-semibold text-white shadow-[0_10px_30px_rgba(255,92,0,0.25)]">
             TL
           </div>
           <div className="min-w-0">
@@ -95,29 +95,29 @@ export default function WorkspaceShell({
 
         <div
           className={cn(
-            'mt-5 rounded-[22px] border px-4 py-4',
+            'mt-4 rounded-[18px] border px-4 py-3',
             roleMeta.badgeClassName
           )}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <span
-              className={cn('h-2.5 w-2.5 rounded-full', roleMeta.accentClassName)}
+              className={cn('h-2 w-2 shrink-0 rounded-full', roleMeta.accentClassName)}
             />
-            <p className="text-[11px] uppercase tracking-[0.18em]">
+            <p className="truncate text-[10px] uppercase tracking-[0.16em]">
               {roleMeta.shellLabel}
             </p>
           </div>
-          <p className="mt-3 text-sm leading-6 text-[#D7DEE6]">
+          <p className="mt-2 text-sm leading-5 text-[#D7DEE6]">
             {roleMeta.description}
           </p>
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-5">
-        <div className="space-y-6">
+      <div className="min-h-0 flex-1 overflow-y-auto px-3 py-4">
+        <div className="space-y-5">
           {navigation.map((group) => (
             <div key={group.label} className="min-w-0">
-              <p className="px-3 text-[11px] uppercase tracking-[0.18em] text-[#5F6A75]">
+              <p className="px-3 text-[10px] uppercase tracking-[0.18em] text-[#5F6A75]">
                 {group.label}
               </p>
               <div className="mt-3 space-y-2">
@@ -131,7 +131,7 @@ export default function WorkspaceShell({
                       href={item.href}
                       prefetch={false}
                       className={cn(
-                        'group flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-[20px] border px-3 py-3 transition-all duration-200',
+                        'group flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-[16px] border px-3 py-2.5 transition-all duration-200',
                         isActive
                           ? 'border-[#2B323C] bg-[#14181D] text-[#FAFAFA] shadow-[0_10px_28px_rgba(0,0,0,0.14)]'
                           : 'border-transparent text-[#8A949F] hover:border-[#212831] hover:bg-[#101419] hover:text-[#E6EDF3]'
@@ -139,7 +139,7 @@ export default function WorkspaceShell({
                     >
                       <div
                         className={cn(
-                          'flex h-11 w-11 shrink-0 items-center justify-center rounded-[16px] border transition-colors',
+                          'flex h-10 w-10 shrink-0 items-center justify-center rounded-[13px] border transition-colors',
                           isActive
                             ? 'border-white/10 bg-white/5 text-[#FAFAFA]'
                             : 'border-[#1A2028] bg-[#0E1217] text-[#6E7782] group-hover:text-[#C6D0D9]'
@@ -149,7 +149,7 @@ export default function WorkspaceShell({
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{item.label}</p>
-                        <p className="truncate text-xs text-[#5F6A75]">
+                        <p className="truncate text-[11px] text-[#5F6A75]">
                           {item.description}
                         </p>
                       </div>
@@ -162,10 +162,10 @@ export default function WorkspaceShell({
         </div>
       </div>
 
-      <div className="border-t border-white/5 px-4 py-4">
-        <div className="rounded-[22px] border border-[#1A2028] bg-[#0E1217] p-4">
+      <div className="shrink-0 border-t border-white/5 px-3 py-3">
+        <div className="rounded-[18px] border border-[#1A2028] bg-[#0E1217] p-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[#141A20] text-sm font-semibold text-[#FAFAFA]">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-[#141A20] text-sm font-semibold text-[#FAFAFA]">
               {initials}
             </div>
             <div className="min-w-0 flex-1">
@@ -178,16 +178,16 @@ export default function WorkspaceShell({
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 gap-2">
+          <div className="mt-3 grid grid-cols-2 gap-2">
             <Link
               href={roleMeta.profileHref}
-              className="rounded-[14px] border border-[#212831] bg-[#11161C] px-3 py-2 text-center text-xs font-medium text-[#D8E0E8] transition-colors hover:border-[#2E3742] hover:bg-[#151B22]"
+              className="rounded-[12px] border border-[#212831] bg-[#11161C] px-3 py-2 text-center text-xs font-medium text-[#D8E0E8] transition-colors hover:border-[#2E3742] hover:bg-[#151B22]"
             >
               Profile
             </Link>
             <Link
               href={roleMeta.helpHref}
-              className="rounded-[14px] border border-[#212831] bg-[#11161C] px-3 py-2 text-center text-xs font-medium text-[#D8E0E8] transition-colors hover:border-[#2E3742] hover:bg-[#151B22]"
+              className="rounded-[12px] border border-[#212831] bg-[#11161C] px-3 py-2 text-center text-xs font-medium text-[#D8E0E8] transition-colors hover:border-[#2E3742] hover:bg-[#151B22]"
             >
               Help
             </Link>
@@ -196,7 +196,7 @@ export default function WorkspaceShell({
           <button
             onClick={handleLogout}
             disabled={loggingOut}
-            className="mt-3 flex w-full items-center justify-center gap-2 rounded-[14px] border border-[#2C1B16] bg-[#18100D] px-3 py-2 text-sm font-medium text-[#FFB48C] transition-colors hover:border-[#4B2416] hover:bg-[#20120D] disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-[12px] border border-[#2C1B16] bg-[#18100D] px-3 py-2 text-sm font-medium text-[#FFB48C] transition-colors hover:border-[#4B2416] hover:bg-[#20120D] disabled:cursor-not-allowed disabled:opacity-60"
           >
             <LogOut className="h-4 w-4" />
             {loggingOut ? 'Signing out...' : 'Logout'}
@@ -209,7 +209,7 @@ export default function WorkspaceShell({
   return (
     <div className="min-h-dvh overflow-x-hidden bg-[radial-gradient(circle_at_top_left,rgba(255,92,0,0.08),transparent_24%),linear-gradient(180deg,#0A0B0D_0%,#090A0C_100%)] text-text-primary">
       <div className="flex min-h-dvh w-full">
-        <aside className="hidden h-dvh min-w-[304px] max-w-[304px] shrink-0 overflow-hidden border-r border-white/5 bg-[#0B0F13]/96 backdrop-blur-xl lg:flex xl:min-w-[320px] xl:max-w-[320px]">
+        <aside className="hidden h-dvh w-[280px] shrink-0 overflow-hidden border-r border-white/5 bg-[#0B0F13]/96 backdrop-blur-xl lg:flex xl:w-[296px]">
           {shellNav}
         </aside>
 
@@ -231,7 +231,7 @@ export default function WorkspaceShell({
 
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <header className="sticky top-0 z-30 shrink-0 border-b border-white/5 bg-[rgba(9,11,14,0.88)] backdrop-blur-xl">
-            <div className="flex h-20 w-full items-center gap-4 px-4 sm:px-6 lg:px-8 xl:px-10">
+            <div className="mx-auto flex h-[72px] w-full max-w-[1480px] items-center gap-4 px-4 sm:px-6 lg:px-7 xl:px-8">
               <button
                 onClick={() => setMobileOpen((current) => !current)}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-[16px] border border-[#1D252E] bg-[#0F141A] text-[#E6EDF3] transition-colors hover:border-[#2B3641] hover:bg-[#131A22] lg:hidden"
@@ -250,7 +250,7 @@ export default function WorkspaceShell({
                 </p>
                 <div className="mt-1 flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
                   <h1
-                    className="truncate text-xl font-semibold text-[#FAFAFA] sm:text-2xl"
+                    className="truncate text-xl font-semibold text-[#FAFAFA] sm:text-[1.35rem]"
                     style={{ fontFamily: 'Syne, sans-serif' }}
                   >
                     {sectionMeta.title}
@@ -302,7 +302,7 @@ export default function WorkspaceShell({
           </header>
 
           <main className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-            <div className="flex w-full flex-col px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8 xl:px-10">
+            <div className="mx-auto flex w-full max-w-[1480px] flex-col px-4 py-5 sm:px-6 sm:py-6 lg:px-7 lg:py-7 xl:px-8">
               {children}
             </div>
           </main>

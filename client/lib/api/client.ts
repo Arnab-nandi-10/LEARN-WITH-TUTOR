@@ -5,8 +5,11 @@ import type { ApiResponse, ApiError } from '../types';
 // API CLIENT CONFIGURATION
 // ============================================================
 
-const DEFAULT_LOCAL_API_URL = 'http://localhost:5000';
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || DEFAULT_LOCAL_API_URL;
+const DEFAULT_LOCAL_API_URL = 'https://learn-with-tutor.onrender.com';
+
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || DEFAULT_LOCAL_API_URL;
+
 const LOCAL_API_CANDIDATES = Array.from(
   new Set([
     API_BASE_URL,
@@ -16,7 +19,6 @@ const LOCAL_API_CANDIDATES = Array.from(
     'http://127.0.0.1:5001',
   ])
 );
-
 const normalizeOrigin = (value?: string | null): string | null => {
   if (!value) return null;
 

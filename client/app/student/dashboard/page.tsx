@@ -3,16 +3,14 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { BookOpen, Clock, Trophy, ArrowRight } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { useAuth } from '@/lib/stores/authStore';
 import * as enrollmentsApi from '@/lib/api/enrollments';
 import type { EnrollmentWithCourse } from '@/lib/types';
 
 export default function StudentDashboard() {
-  const { user } = useAuth();
   const [enrollments, setEnrollments] = useState<EnrollmentWithCourse[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -53,44 +51,42 @@ export default function StudentDashboard() {
   ];
 
   return (
-    <div className="space-y-8">
-      {/* Welcome Section */}
+    <div className="space-y-7">
       <div>
-        <h1 className="text-2xl font-display font-bold text-text-primary mb-2">
+        <h1 className="mb-2 text-2xl font-display font-bold text-text-primary">
           Student Dashboard
         </h1>
-        <p className="text-text-secondary">
+        <p className="max-w-3xl text-text-secondary">
           Track your learning progress and continue where you left off.
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 xl:gap-5">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <Card key={stat.label}>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-text-secondary mb-1">{stat.label}</p>
-                    <p className="text-3xl font-display font-bold text-text-primary">
-                      {loading ? '-' : stat.value}
-                    </p>
-                  </div>
-                  <div className={`p-3 bg-bg-elevated rounded-lg ${stat.color}`}>
-                    <Icon className="w-6 h-6" />
-                  </div>
+            <div
+              key={stat.label}
+              className="rounded-[18px] border border-[#1E1E1E] bg-[#111111] p-5"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="truncate text-sm text-text-secondary">{stat.label}</p>
+                  <p className="mt-3 text-3xl font-display font-bold tabular-nums text-text-primary">
+                    {loading ? '-' : stat.value}
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
+                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-bg-elevated ${stat.color}`}>
+                  <Icon className="h-6 w-6" />
+                </div>
+              </div>
+            </div>
           );
         })}
       </div>
 
-      {/* Continue Learning */}
       <div>
-        <div className="flex items-center justify-between mb-4">
+        <div className="mb-4 flex items-center justify-between gap-4">
           <h2 className="text-xl font-display font-semibold text-text-primary">
             Continue Learning
           </h2>
@@ -102,7 +98,7 @@ export default function StudentDashboard() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {[1, 2, 3].map((i) => (
               <Card key={i}>
                 <Skeleton className="h-32 rounded-t-lg" />
@@ -116,11 +112,11 @@ export default function StudentDashboard() {
         ) : enrollments.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <BookOpen className="w-12 h-12 text-text-muted mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-text-primary mb-2">
+              <BookOpen className="mx-auto mb-4 h-12 w-12 text-text-muted" />
+              <h3 className="mb-2 text-lg font-semibold text-text-primary">
                 No courses yet
               </h3>
-              <p className="text-text-secondary mb-4">
+              <p className="mb-4 text-text-secondary">
                 Start your learning journey by exploring our course catalog.
               </p>
               <Link href="/student/courses">
@@ -129,20 +125,23 @@ export default function StudentDashboard() {
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {enrollments.slice(0, 3).map((enrollment) => (
-              <Card key={enrollment._id} className="hover:border-accent/50 transition-colors">
-                <div className="h-32 bg-gradient-to-br from-accent/20 to-accent/5 rounded-t-lg flex items-center justify-center">
-                  <BookOpen className="w-12 h-12 text-accent" />
+              <div
+                key={enrollment._id}
+                className="overflow-hidden rounded-[18px] border border-[#1E1E1E] bg-[#111111] p-5 transition-colors hover:border-accent/50"
+              >
+                <div className="flex h-36 items-center justify-center rounded-[14px] border border-[#2A1C14] bg-[#3A1A0D]">
+                  <BookOpen className="h-12 w-12 text-accent" />
                 </div>
-                <CardContent className="pt-4">
-                  <Badge variant={enrollment.status === 'completed' ? 'success' : 'info'} className="mb-2">
+                <div className="pt-4">
+                  <Badge variant={enrollment.status === 'completed' ? 'success' : 'info'} className="mb-2 uppercase">
                     {enrollment.status}
                   </Badge>
-                  <h3 className="font-semibold text-text-primary mb-1">
+                  <h3 className="mb-1 truncate font-semibold text-text-primary">
                     {enrollment.course?.title || `Course #${enrollment.course_id.slice(-6)}`}
                   </h3>
-                  <p className="text-sm text-text-secondary mb-4">
+                  <p className="mb-4 text-sm text-text-secondary">
                     Enrolled {new Date(enrollment.enrolled_at).toLocaleDateString()}
                   </p>
                   <Link href={`/student/courses/${enrollment.course_id}`}>
@@ -150,23 +149,22 @@ export default function StudentDashboard() {
                       Continue Learning
                     </Button>
                   </Link>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* Quick Actions */}
       <div>
-        <h2 className="text-xl font-display font-semibold text-text-primary mb-4">
+        <h2 className="mb-4 text-xl font-display font-semibold text-text-primary">
           Quick Actions
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Link href="/student/courses">
             <Card className="hover:border-accent/50 transition-colors cursor-pointer">
               <CardContent className="py-6 text-center">
-                <BookOpen className="w-8 h-8 text-accent mx-auto mb-2" />
+                <BookOpen className="mx-auto mb-2 h-8 w-8 text-accent" />
                 <p className="font-medium text-text-primary">Browse Courses</p>
               </CardContent>
             </Card>
@@ -174,7 +172,7 @@ export default function StudentDashboard() {
           <Link href="/student/enrolled">
             <Card className="hover:border-accent/50 transition-colors cursor-pointer">
               <CardContent className="py-6 text-center">
-                <Clock className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
+                <Clock className="mx-auto mb-2 h-8 w-8 text-yellow-500" />
                 <p className="font-medium text-text-primary">My Learning</p>
               </CardContent>
             </Card>
@@ -182,7 +180,7 @@ export default function StudentDashboard() {
           <Link href="/student/profile">
             <Card className="hover:border-accent/50 transition-colors cursor-pointer">
               <CardContent className="py-6 text-center">
-                <Trophy className="w-8 h-8 text-green-500 mx-auto mb-2" />
+                <Trophy className="mx-auto mb-2 h-8 w-8 text-green-500" />
                 <p className="font-medium text-text-primary">Certificates</p>
               </CardContent>
             </Card>
@@ -190,7 +188,7 @@ export default function StudentDashboard() {
           <Link href="/#contact">
             <Card className="hover:border-accent/50 transition-colors cursor-pointer">
               <CardContent className="py-6 text-center">
-                <ArrowRight className="w-8 h-8 text-blue-500 mx-auto mb-2" />
+                <ArrowRight className="mx-auto mb-2 h-8 w-8 text-blue-500" />
                 <p className="font-medium text-text-primary">Get Help</p>
               </CardContent>
             </Card>

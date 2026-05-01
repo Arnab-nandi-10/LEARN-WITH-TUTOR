@@ -36,10 +36,23 @@ const allowed_origins=new Set(
     ].filter(Boolean)
 )
 
+const isLocalhostOrigin=(origin)=>{
+    try{
+        const url=new URL(origin)
+        return url.hostname==="localhost" || url.hostname==="127.0.0.1"
+    }catch{
+        return false
+    }
+}
+
 // CORS must be first - allow known local frontend origins and configured frontend URLs
 app.use(cors({
     origin:(origin,callback)=>{
         if(!origin || allowed_origins.has(origin)){
+            return callback(null,true)
+        }
+
+        if(process.env.NODE_ENV!=="production" && isLocalhostOrigin(origin)){
             return callback(null,true)
         }
 

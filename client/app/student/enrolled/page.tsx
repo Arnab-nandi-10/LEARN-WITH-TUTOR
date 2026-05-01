@@ -105,41 +105,47 @@ export default function EnrolledCourses() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-7">
       <div>
-        <h1 className="text-2xl font-display font-bold text-text-primary mb-2">
+        <h1 className="mb-2 text-2xl font-display font-bold text-text-primary">
           My Learning
         </h1>
-        <p className="text-text-secondary">
+        <p className="max-w-3xl text-text-secondary">
           Track your enrolled courses and continue where you left off.
         </p>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Card className="cursor-pointer hover:border-accent/50 transition-colors" onClick={() => setFilter('all')}>
-          <CardContent className="py-4 text-center">
-            <p className="text-2xl font-bold text-text-primary">{stats.total}</p>
+        <Card
+          className="cursor-pointer transition-colors hover:border-accent/50"
+          onClick={() => setFilter('all')}
+        >
+          <CardContent className="py-2 text-center">
+            <p className="text-2xl font-bold tabular-nums text-text-primary">{stats.total}</p>
             <p className="text-sm text-text-secondary">Total Courses</p>
           </CardContent>
         </Card>
-        <Card className="cursor-pointer hover:border-accent/50 transition-colors" onClick={() => setFilter('active')}>
-          <CardContent className="py-4 text-center">
-            <p className="text-2xl font-bold text-yellow-500">{stats.active}</p>
+        <Card
+          className="cursor-pointer transition-colors hover:border-accent/50"
+          onClick={() => setFilter('active')}
+        >
+          <CardContent className="py-2 text-center">
+            <p className="text-2xl font-bold tabular-nums text-yellow-500">{stats.active}</p>
             <p className="text-sm text-text-secondary">In Progress</p>
           </CardContent>
         </Card>
-        <Card className="cursor-pointer hover:border-accent/50 transition-colors" onClick={() => setFilter('completed')}>
-          <CardContent className="py-4 text-center">
-            <p className="text-2xl font-bold text-green-500">{stats.completed}</p>
+        <Card
+          className="cursor-pointer transition-colors hover:border-accent/50"
+          onClick={() => setFilter('completed')}
+        >
+          <CardContent className="py-2 text-center">
+            <p className="text-2xl font-bold tabular-nums text-green-500">{stats.completed}</p>
             <p className="text-sm text-text-secondary">Completed</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {(['all', 'active', 'completed'] as const).map((f) => (
           <Button
             key={f}
@@ -153,14 +159,13 @@ export default function EnrolledCourses() {
         ))}
       </div>
 
-      {/* Course List */}
       {loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
             <Card key={i}>
               <CardContent className="p-6">
-                <div className="flex gap-4">
-                  <Skeleton className="w-32 h-24 rounded-lg" />
+                <div className="flex flex-col gap-4 sm:flex-row">
+                  <Skeleton className="h-24 w-full rounded-lg sm:w-32" />
                   <div className="flex-1">
                     <Skeleton className="h-5 w-1/2 mb-2" />
                     <Skeleton className="h-4 w-3/4 mb-4" />
@@ -174,11 +179,11 @@ export default function EnrolledCourses() {
       ) : filteredEnrollments.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <BookOpen className="w-12 h-12 text-text-muted mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-text-primary mb-2">
+            <BookOpen className="mx-auto mb-4 h-12 w-12 text-text-muted" />
+            <h3 className="mb-2 text-lg font-semibold text-text-primary">
               {filter === 'all' ? 'No enrolled courses' : `No ${filter} courses`}
             </h3>
-            <p className="text-text-secondary mb-4">
+            <p className="mb-4 text-text-secondary">
               {filter === 'all' 
                 ? 'Start learning by browsing our course catalog.'
                 : `You don't have any ${filter} courses yet.`}
@@ -219,64 +224,57 @@ function EnrollmentCard({
   const progressPercentage = progress?.percentage || 0;
 
   return (
-    <Card className="hover:border-accent/50 transition-colors">
-      <CardContent className="p-6">
-        <div className="flex flex-col sm:flex-row gap-4">
-          {/* Thumbnail */}
-          <div className="w-full sm:w-32 h-24 bg-gradient-to-br from-accent/20 to-accent/5 rounded-lg flex items-center justify-center flex-shrink-0">
-            <BookOpen className="w-10 h-10 text-accent" />
+    <Card className="transition-colors hover:border-accent/50">
+      <CardContent>
+        <div className="flex flex-col gap-5 md:flex-row">
+          <div className="flex h-28 w-full shrink-0 items-center justify-center rounded-[14px] border border-[#2A1C14] bg-[#3A1A0D] md:w-40">
+            <BookOpen className="h-10 w-10 text-accent" />
           </div>
 
-          {/* Content */}
-          <div className="flex-1">
-            <div className="flex items-start justify-between gap-2">
-              <div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+              <div className="min-w-0">
                 <Badge variant={isCompleted ? 'success' : 'info'} className="mb-2">
                   {isCompleted ? (
                     <>
-                      <CheckCircle className="w-3 h-3 mr-1" />
+                      <CheckCircle className="mr-1 h-3 w-3" />
                       Completed
                     </>
                   ) : (
                     <>
-                      <Clock className="w-3 h-3 mr-1" />
+                      <Clock className="mr-1 h-3 w-3" />
                       In Progress
                     </>
                   )}
                 </Badge>
-                <h3 className="font-semibold text-text-primary">
+                <h3 className="truncate font-semibold text-text-primary">
                   {enrollment.course?.title || `Course #${enrollment.course_id.slice(-6)}`}
                 </h3>
-                <p className="text-sm text-text-muted mt-1">
+                <p className="mt-1 text-sm text-text-muted">
                   Enrolled on {new Date(enrollment.enrolled_at).toLocaleDateString()}
                 </p>
               </div>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="mt-4">
-              <div className="flex justify-between text-sm mb-1">
-                <span className="text-text-secondary">Progress</span>
-                <span className="text-text-primary font-medium">
-                  {loadingProgress ? '--' : `${progressPercentage}%`}
-                </span>
-              </div>
-              <div className="h-2 bg-bg-elevated rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-accent rounded-full transition-all"
-                  style={{ width: loadingProgress ? '0%' : `${progressPercentage}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Action */}
-            <div className="mt-4">
-              <Link href={`/student/courses/${enrollment.course_id}`}>
-                <Button variant="primary" size="sm">
-                  <Play className="w-4 h-4 mr-1" />
+              <Link href={`/student/courses/${enrollment.course_id}`} className="shrink-0">
+                <Button variant="primary" size="sm" className="w-full lg:w-auto">
+                  <Play className="mr-1 h-4 w-4" />
                   {isCompleted ? 'Review Course' : 'Continue Learning'}
                 </Button>
               </Link>
+            </div>
+
+            <div className="mt-4">
+              <div className="mb-1 flex justify-between text-sm">
+                <span className="text-text-secondary">Progress</span>
+                <span className="font-medium tabular-nums text-text-primary">
+                  {loadingProgress ? '--' : `${progressPercentage}%`}
+                </span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-bg-elevated">
+                <div
+                  className="h-full rounded-full bg-accent transition-all"
+                  style={{ width: loadingProgress ? '0%' : `${progressPercentage}%` }}
+                />
+              </div>
             </div>
           </div>
         </div>
