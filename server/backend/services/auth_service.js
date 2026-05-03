@@ -3,6 +3,7 @@ const user_repo=require("../repositories/user_repository")
 const token_service=require("./token_service")
 const refresh_repo=require("../repositories/refresh_token_repository")
 const AppError=require("../utils/app_error")
+const jwt=require("jsonwebtoken")
 
 const normalize_email=(email)=>String(email||"").trim().toLowerCase()
 
@@ -74,7 +75,17 @@ const refresh=async(token)=>{
     const existing=await refresh_repo.find_token(token)
     if(!existing) throw new AppError("invalid refresh token",401)
 
-    const decoded=require("jsonwebtoken").verify(token,process.env.JWT_SECRET)
+    let decoded
+    try{
+        decoded=jwt.verify(token,process.env.JWT_SECRET)
+    }catch(err){
+        // If the refresh token is expired or invalid, remove it from DB and return a clear error
+        try{ await refresh_repo.delete_token(token) }catch(_){}
+        if(err.name==="TokenExpiredError"){
+            throw new AppError("refresh token expired",401)
+        }
+        throw new AppError("invalid refresh token",401)
+    }
 
     const user=await user_repo.find_user_by_id(decoded.id)
     if(!user) throw new AppError("user not found",404)

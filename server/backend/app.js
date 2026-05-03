@@ -29,15 +29,23 @@ const refund_routes = require("./routes/refund.routes");
 
 const app = express();
 
+const parse_origins = (value = "") =>
+  value
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
 
-// ✅ FIXED: Explicit allowed origins (no dependency on missing env)
 const allowed_origins = [
-  "https://learn-with-tutor.vercel.app", // ✅ your frontend (IMPORTANT)
+  process.env.FRONTEND_URL,
+  process.env.NEXT_PUBLIC_FRONTEND_URL,
+  process.env.NEXT_PUBLIC_APP_URL,
+  ...parse_origins(process.env.CORS_ORIGINS),
+  "https://learn-with-tutor.vercel.app",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:3001",
   "http://127.0.0.1:3001"
-];
+].filter(Boolean);
 
 
 // ✅ CORS CONFIG (FINAL)
@@ -49,10 +57,12 @@ app.use(cors({
       return callback(null, true);
     }
 
-    return callback(new Error(`CORS blocked: ${origin}`));
+    const error = new Error(`CORS blocked: ${origin}`);
+    error.status = 403;
+    return callback(error);
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
@@ -94,6 +104,16 @@ app.use("/api/refund", refund_routes);
 
 // ✅ ROOT
 app.get("/", (req, res) => res.send("API running"));
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ success: true, message: "API running" });
+});
+
+app.use("/api", (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `API endpoint not found: ${req.method} ${req.originalUrl}`
+  });
+});
 
 
 // ✅ ERROR HANDLER

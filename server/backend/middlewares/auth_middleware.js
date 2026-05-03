@@ -9,7 +9,10 @@ const protect=async(req,res,next)=>{
         req.user=decoded
         next()
     }catch(err){
-        next({status:401,message:"invalid token"})
+        next({
+            status:err.status||401,
+            message:err.message||"invalid token"
+        })
     }
 }
 

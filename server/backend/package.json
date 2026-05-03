@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
+    "test": "node --test",
     "ensure-admin": "node scripts/ensure-local-admin.js"
   },
   "dependencies": {
@@ -25,6 +26,6 @@
     "nodemon": "^3.1.14"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=20.x"
   }
 }

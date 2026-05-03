@@ -88,7 +88,10 @@ Create `server/backend/.env` with:
 ```env
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
+MONGO_URI_DIRECT=your_direct_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
+ACCESS_TOKEN_EXPIRES_IN=15m
+REFRESH_TOKEN_EXPIRES_IN=7d
 AWS_REGION=your_aws_region
 AWS_ACCESS_KEY=your_aws_access_key
 AWS_SECRET_KEY=your_aws_secret_key
@@ -99,6 +102,8 @@ FRONTEND_URL=http://localhost:3001
 Notes:
 
 - `MONGO_URI` and `JWT_SECRET` are required.
+- `MONGO_URI_DIRECT` is recommended as a fallback when SRV DNS lookup is unreliable.
+- `ACCESS_TOKEN_EXPIRES_IN` and `REFRESH_TOKEN_EXPIRES_IN` are optional but recommended so token lifetimes are explicit.
 - AWS variables are required for upload endpoints.
 - The backend currently allows local frontend origins on `http://localhost:3000` and `http://localhost:3001`.
 

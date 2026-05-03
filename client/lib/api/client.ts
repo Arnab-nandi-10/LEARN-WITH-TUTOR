@@ -64,6 +64,8 @@ const getNextLocalApiBaseUrl = (
   );
 };
 
+const getActiveApiBaseUrl = () => apiClient.defaults.baseURL || API_BASE_URL;
+
 // Create axios instance
 export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -186,7 +188,7 @@ apiClient.interceptors.response.use(
 
       try {
         // Call refresh endpoint
-        const response = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {
+        const response = await axios.post(`${getActiveApiBaseUrl()}/api/auth/refresh`, {
           refresh_token: refreshToken,
         });
 
